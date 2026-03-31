@@ -17,3 +17,55 @@ class Controller:
             return
         self._view.txt_result.controls.append(ft.Text(f"Hello, {name}!"))
         self._view.update_page()
+
+
+    def lista_corsi(self):
+        lista_corsi = self._model.get_corsi()
+        res=[]
+        for corso in lista_corsi:
+            res.append(
+                ft.dropdown.Option(
+                    key=corso.codins,
+                    text=corso.__str__()
+                )
+            )
+        return res
+
+    def cerca_iscritti(self, e):
+        self._view._lvOut.controls.clear()
+        corso = self._view._dd_corsi.value
+        if corso is None:
+            self._view._lvOut.controls.append(
+                ft.Text("Attenzione! Seleziona un corso", color="red")
+            )
+            self._view.update_page()
+            return
+
+        studenti = self._model.cerca_iscritti(corso)
+        self._view._lvOut.controls.append(ft.Text(f"Ci sono {len(studenti)} iscritti al corso: "))
+        for studente in studenti:
+            print(studente)
+            self._view._lvOut.controls.append(
+                ft.Text(studente)
+            )
+            self._view.update_page()
+
+
+
+    def cerca_studente(self, e):
+        matricola = self._view._txt_matricola
+        if matricola is None:
+            self._view._lvOut.controls.append(
+                ft.Text("Attenzione! Seleziona una matricola", color="red")
+            )
+            self._view.update_page()
+            return
+        self._model.cerca_matricola(matricola)
+
+
+def cerca_corsi(self, e):
+        pass
+
+    def iscrivi(self, e):
+        pass
+
