@@ -5,8 +5,8 @@ from database.DB_connect import get_connection
 
 class studenteDAO:
 
-    @classmethod
-    def get_studenti(cls):
+    @staticmethod
+    def get_studenti():
         cnx = get_connection()
         cursor = cnx.cursor()
 
@@ -21,3 +21,35 @@ class studenteDAO:
         cursor.close()
         cnx.close()
         return res
+
+    @staticmethod
+    def get_corsi_matricola( matricola):
+        cnx = get_connection()
+        cursor = cnx.cursor()
+
+        query = """select codins
+                    FROM iscrizione
+                    WHERE matricola = %s"""
+
+        cursor.execute(query, (matricola,))
+        res = []
+        for row in cursor:
+            res.append(row[0])
+
+        cursor.close()
+        cnx.close()
+        return res
+
+    @staticmethod
+    def iscrivi_matricola_a_corso(matricola, codins):
+        cnx = get_connection()
+
+        cursor = cnx.cursor()
+        query = """insert into iscrizione
+                            (matricola, codins) values (%s, %s)"""
+        cursor.execute(query, (matricola, codins,))
+
+        cnx.commit()
+        cursor.close()
+        cnx.close()
+        return

@@ -18,11 +18,8 @@ class Model:
         return corsi
 
     def cerca_iscritti(self, corso):
-        print(corso)
         lista_matricole = corsoDAO.get_matricole_corso(corso)
-        print(lista_matricole)
         dati = studenteDAO.get_studenti()
-        print(dati)
         studenti_corso = []
         studenti = []
         for i in dati:
@@ -30,17 +27,32 @@ class Model:
                 studenti_corso.append(i)
         for s in studenti_corso:
             studenti.append(Studente(s[0],s[1],s[2],s[3]))
-        print(studenti)
         return studenti
 
     def cerca_matricola(self, matricola):
         dati = studenteDAO.get_studenti()
-        matricole = []
-        for i in dati:
-            matricole.append(i[0])
-        if matricola in matricole:
+        for s in dati:
+            if int(matricola) == int(s[0]):
+                return Studente(s[0], s[1], s[2], s[3])
+        return None
 
+    def cerca_corsi(self, matricola):
+        dati = studenteDAO.get_corsi_matricola(matricola)
+        print(dati)
+        dati_corsi = corsoDAO.get_corsi()
+        print(dati_corsi)
+        corsi = []
+        for i in dati_corsi:
+            if i[0] in dati:
+                corsi.append(Corso(i[0],i[1],i[2],i[3]))
+        return corsi
 
+    def iscrivi(self, matricola, corso):
+        studente = self.cerca_matricola(matricola)
+        if studente is None:
+            return 1
+        studenteDAO.iscrivi_matricola_a_corso(matricola, corso)
+        return 0
 
 
 
